@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
 import { ArticleParamsForm } from './ArticleParamsForm';
+import { useState } from 'react';
 import { defaultArticleState } from 'src/constants/articleProps';
 
-const ArticleParamsFormWrapper = (props: unknown) => {
+const ArticleParamsFormWrapper = () => {
 	const [settings, setSettings] = useState({
 		fontFamilyOption: defaultArticleState.fontFamilyOption,
 		fontColor: defaultArticleState.fontColor,
@@ -12,13 +12,7 @@ const ArticleParamsFormWrapper = (props: unknown) => {
 		fontSize: defaultArticleState.fontSizeOption.value,
 	});
 
-	return (
-		<ArticleParamsForm
-			currentSettings={settings}
-			onApply={setSettings}
-			{...props}
-		/>
-	);
+	return <ArticleParamsForm currentSettings={settings} onApply={setSettings} />;
 };
 
 const meta: Meta<typeof ArticleParamsFormWrapper> = {

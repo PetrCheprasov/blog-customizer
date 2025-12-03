@@ -3,7 +3,6 @@ import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
-import { Text } from 'src/ui/text';
 
 import {
 	fontFamilyOptions,
@@ -104,9 +103,7 @@ export const ArticleParamsForm = ({
 					<h2 className={styles.formTitle}>ЗАДАЙТЕ ПАРАМЕТРЫ</h2>
 
 					<div className={styles.section} style={{ marginBottom: '50px' }}>
-						<Text size={18} weight={800} className={styles.sectionTitle}>
-							Шрифт
-						</Text>
+						<h3 className={styles.sectionTitle}>Шрифт</h3>
 						<Select
 							selected={formSettings.fontFamilyOption}
 							options={fontFamilyOptions.filter(
@@ -120,9 +117,7 @@ export const ArticleParamsForm = ({
 					<div className={styles.separator}></div>
 
 					<div className={styles.section} style={{ marginBottom: '50px' }}>
-						<Text size={18} weight={800} className={styles.sectionTitle}>
-							РАЗМЕР ШРИФТА
-						</Text>
+						<h3 className={styles.sectionTitle}>РАЗМЕР ШРИФТА</h3>
 						<RadioGroup
 							name='fontSize'
 							selected={selectedFontSizeOption}
@@ -135,9 +130,7 @@ export const ArticleParamsForm = ({
 					<div className={styles.separator}></div>
 
 					<div className={styles.section} style={{ marginBottom: '100px' }}>
-						<Text size={18} weight={800} className={styles.sectionTitle}>
-							ЦВЕТ ШРИФТА
-						</Text>
+						<h3 className={styles.sectionTitle}>ЦВЕТ ШРИФТА</h3>
 						<Select
 							selected={formSettings.fontColor}
 							options={fontColorOptions}
@@ -149,9 +142,7 @@ export const ArticleParamsForm = ({
 					<div className={styles.separator}></div>
 
 					<div className={styles.section} style={{ marginBottom: '50px' }}>
-						<Text size={18} weight={800} className={styles.sectionTitle}>
-							ЦВЕТ ФОНА
-						</Text>
+						<h3 className={styles.sectionTitle}>ЦВЕТ ФОНА</h3>
 						<Select
 							selected={formSettings.backgroundColor}
 							options={backgroundColorOptions}
@@ -163,9 +154,7 @@ export const ArticleParamsForm = ({
 					<div className={styles.separator}></div>
 
 					<div className={styles.section}>
-						<Text size={18} weight={800} className={styles.sectionTitle}>
-							ШИРИНА КОНТЕНТА
-						</Text>
+						<h3 className={styles.sectionTitle}>ШИРИНА КОНТЕНТА</h3>
 						<Select
 							selected={formSettings.contentWidth}
 							options={contentWidthArr.filter(

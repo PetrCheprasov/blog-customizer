@@ -40,14 +40,10 @@ export const Option = (props: OptionProps) => {
 
 	return (
 		<li
-			className={clsx(
-				styles.option, 
-				styles[optionClassName || ''],
-				{
-					[styles.option_disabled]: disabled,
-					[styles.option_selected]: isSelected
-				}
-			)}
+			className={clsx(styles.option, styles[optionClassName || ''], {
+				[styles.option_disabled]: disabled,
+				[styles.option_selected]: isSelected,
+			})}
 			value={value}
 			onClick={handleClick(value)}
 			tabIndex={disabled ? -1 : 0}

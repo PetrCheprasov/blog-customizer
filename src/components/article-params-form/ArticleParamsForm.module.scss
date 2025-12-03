@@ -1,13 +1,12 @@
 .container {
 	position: fixed;
 	left: 0;
+	z-index: 1000;
 	width: 616px;
 	height: 100%;
-	overflow-y: auto;
-	overflow-x: hidden;
+	overflow: hidden auto;
 	transform: translate(-616px);
 	transition: transform 0.5s ease;
-	z-index: 1000;
 }
 
 .container_open {
@@ -27,20 +26,19 @@
 }
 
 .formTitle {
-	margin: 0 0 50px 0 !important;
-	text-align: left;
-	font-family: 'Open Sans', sans-serif !important;
+	margin: 0 0 50px !important;
+	overflow: visible !important;
 	font-weight: 800 !important;
 	font-size: 31px !important;
-	line-height: 100% !important;
-	letter-spacing: 0% !important;
-	text-transform: uppercase !important;
-	text-align: left !important;
+	font-family: 'Open Sans', sans-serif !important;
 	font-style: normal !important;
 	font-variant: normal !important;
-	text-decoration: none !important;
-	overflow: visible !important;
+	line-height: normal !important;
+	letter-spacing: 0% !important;
 	white-space: normal !important;
+	text-align: left !important;
+	text-transform: uppercase !important;
+	text-decoration: none !important;
 	word-wrap: break-word !important;
 }
 
@@ -50,35 +48,31 @@
 }
 
 .sectionTitle {
+	display: block !important;
 	margin-bottom: 4px !important;
-	text-transform: uppercase;
+	padding: 0 !important;
 	font-weight: 800;
-	
+	font-size: 16px !important;
+	font-family: inherit !important;
+	line-height: normal !important;
+	letter-spacing: normal !important;
+	text-align: left !important;
+	text-transform: uppercase;
+	background: none !important;
+	background-color: transparent !important;
 	border: none !important;
 	outline: none !important;
 	box-shadow: none !important;
-	
-	background: none !important;
-	background-color: transparent !important;
-	
-	padding: 0 !important;
-	
-	display: block !important;
-	text-align: left !important;
-	font-family: inherit !important;
-	font-size: 16px !important;
-	line-height: normal !important;
-	letter-spacing: normal !important;
 }
 
 .separator {
+	align-self: center;
 	width: 554px !important;
 	height: 0 !important;
 	margin: 0 auto !important;
 	border: none !important;
-	border-top: 1px solid #D7D7D7 !important;
+	border-top: 1px solid #d7d7d7 !important;
 	opacity: 1 !important;
-	align-self: center;
 }
 
 .bottomContainer {
@@ -88,18 +82,18 @@
 	height: 48px;
 	margin-top: 207px;
 	opacity: 1;
-	
+
 	& button {
+		display: flex;
+		flex: none;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
 		width: 180px;
 		height: 48px;
-		flex: none;
 		padding-top: 12px;
 		padding-bottom: 12px;
 		border-width: 1px;
 		opacity: 1;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 10px;
 	}
 }
