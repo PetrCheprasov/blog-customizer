@@ -71,14 +71,20 @@
 	background-color: rgb(255 255 255 / 100%);
 	border: 1px;
 	cursor: pointer;
+	transition: background-color 0.15s ease;
+	position: relative;
 }
 
 .option[aria-selected='true'] {
 	background-color: rgb(0 0 0 / 5%);
 }
 
-.option:hover {
-	background: var(--grey, #c4c4c4);
+.option:hover:not(.option_disabled) {
+	background: #EEEEEE;
+}
+
+.option:active:not(.option_disabled) {
+	background: #D7D7D7;
 }
 
 @mixin option-color-before {
@@ -86,6 +92,8 @@
 	width: 35px;
 	height: 35px;
 	margin-right: 10px;
+	position: relative;
+	z-index: 1;
 }
 
 .option-black::before {
@@ -100,6 +108,7 @@
 	width: 17px;
 	height: 17px;
 	border-radius: 100%;
+	z-index: 3;
 }
 
 .option-black[data-selected='true']::after {
@@ -204,4 +213,70 @@
 .option-narrow::before {
 	@include option-width-before;
 	background-image: url('../../images/narrow.svg');
+}
+
+.option_disabled {
+	cursor: not-allowed;
+	pointer-events: none;
+	position: relative;
+	opacity: 1;
+}
+
+.option_disabled[class*="option-"]::before {
+	position: relative;
+	z-index: 1;
+}
+
+.option_disabled[class*="option-"]::after {
+	content: '';
+	position: absolute;
+	left: 26px;
+	top: 50%;
+	width: 49.5px;
+	height: 0;
+	border-top: 1px solid #787878;
+	transform: translateY(-50%) rotate(-135deg);
+	transform-origin: left center;
+	z-index: 2;
+	
+	background-color: transparent !important;
+	border-radius: 0 !important;
+	width: 49.5px !important;
+	height: 0 !important;
+}
+
+.option_disabled[class*="option-"][data-selected='true']::after {
+	content: '';
+	position: absolute;
+	left: 26px;
+	top: 50%;
+	width: 49.5px;
+	height: 0;
+	border-top: 1px solid #787878;
+	transform: translateY(-50%) rotate(-135deg);
+	z-index: 2;
+}
+
+.option_disabled[class*="option-"][data-selected='true']::before {
+	position: relative;
+	z-index: 1;
+}
+
+.option[class*="option-"][data-selected='true']::after {
+	@include option-color-after;
+	background-color: #ffffff;
+	z-index: 3;
+}
+
+.option_selected {
+	background-color: #f0f0f0;
+	font-weight: bold;
+	
+	&:hover:not(.option_disabled) {
+		background: #EEEEEE;
+	}
+	
+	&:active:not(.option_disabled) {
+		background: #D7D7D7;
+	}
 }
