@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import clsx from 'clsx';
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
+import { useCloseOnOutsideClickOrEsc } from 'src/ui/radio-group/hooks/useCloseOnOutsideClickOrEsc';
 
 import {
 	fontFamilyOptions,
@@ -44,6 +46,14 @@ export const ArticleParamsForm = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const [formSettings, setFormSettings] =
 		useState<ArticleSettings>(currentSettings);
+
+	const asideRef = useRef<HTMLDivElement>(null);
+
+	useCloseOnOutsideClickOrEsc({
+		isOpenElement: isOpen,
+		elementRef: asideRef,
+		onClose: () => setIsOpen(false),
+	});
 
 	const fontColorOptions = prepareColorOptions(
 		fontColors,
@@ -93,9 +103,8 @@ export const ArticleParamsForm = ({
 		<>
 			<ArrowButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
 			<aside
-				className={`${styles.container} ${
-					isOpen ? styles.container_open : ''
-				}`}>
+				ref={asideRef}
+				className={clsx(styles.container, isOpen && styles.container_open)}>
 				<form
 					className={styles.form}
 					onSubmit={handleApply}
