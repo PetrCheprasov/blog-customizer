@@ -63,6 +63,7 @@
 }
 
 .option {
+	position: relative;
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
@@ -71,21 +72,28 @@
 	background-color: rgb(255 255 255 / 100%);
 	border: 1px;
 	cursor: pointer;
+	transition: background-color 0.15s ease;
 }
 
 .option[aria-selected='true'] {
 	background-color: rgb(0 0 0 / 5%);
 }
 
-.option:hover {
-	background: var(--grey, #c4c4c4);
+.option:hover:not(.option_disabled) {
+	background: #eeeeee;
+}
+
+.option:active:not(.option_disabled) {
+	background: #d7d7d7;
 }
 
 @mixin option-color-before {
-	content: '';
+	position: relative;
+	z-index: 1;
 	width: 35px;
 	height: 35px;
 	margin-right: 10px;
+	content: '';
 }
 
 .option-black::before {
@@ -94,12 +102,13 @@
 }
 
 @mixin option-color-after {
-	content: '';
 	position: absolute;
 	left: 26px;
+	z-index: 3;
 	width: 17px;
 	height: 17px;
 	border-radius: 100%;
+	content: '';
 }
 
 .option-black[data-selected='true']::after {
@@ -204,4 +213,67 @@
 .option-narrow::before {
 	@include option-width-before;
 	background-image: url('../../images/narrow.svg');
+}
+
+.option_disabled {
+	position: relative;
+	cursor: not-allowed;
+	opacity: 1;
+	pointer-events: none;
+}
+
+.option_disabled[class*='option-']::before {
+	position: relative;
+	z-index: 1;
+}
+
+.option_disabled[class*='option-']::after {
+	position: absolute;
+	top: 50%;
+	left: 26px;
+	z-index: 2;
+	width: 49.5px !important;
+	height: 0 !important;
+	background-color: transparent !important;
+	border-top: 1px solid #787878;
+	border-radius: 0 !important;
+	transform: translateY(-50%) rotate(-135deg);
+	transform-origin: left center;
+	content: '';
+}
+
+.option_disabled[class*='option-'][data-selected='true']::after {
+	position: absolute;
+	top: 50%;
+	left: 26px;
+	z-index: 2;
+	width: 49.5px;
+	height: 0;
+	border-top: 1px solid #787878;
+	transform: translateY(-50%) rotate(-135deg);
+	content: '';
+}
+
+.option_disabled[class*='option-'][data-selected='true']::before {
+	position: relative;
+	z-index: 1;
+}
+
+.option[class*='option-'][data-selected='true']::after {
+	@include option-color-after;
+	z-index: 3;
+	background-color: #ffffff;
+}
+
+.option_selected {
+	font-weight: bold;
+	background-color: #f0f0f0;
+
+	&:hover:not(.option_disabled) {
+		background: #eeeeee;
+	}
+
+	&:active:not(.option_disabled) {
+		background: #d7d7d7;
+	}
 }

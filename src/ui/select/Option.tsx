@@ -11,38 +11,54 @@ import styles from './Select.module.scss';
 type OptionProps = {
 	option: OptionType;
 	onClick: (value: OptionType['value']) => void;
+	disabled?: boolean;
+	isSelected?: boolean;
 };
 
 export const Option = (props: OptionProps) => {
 	const {
 		option: { value, title, optionClassName, className },
 		onClick,
+		disabled = false,
+		isSelected = false,
 	} = props;
 	const optionRef = useRef<HTMLLIElement>(null);
 
 	const handleClick =
 		(clickedValue: OptionType['value']): MouseEventHandler<HTMLLIElement> =>
 		() => {
-			onClick(clickedValue);
+			if (!disabled) {
+				onClick(clickedValue);
+			}
 		};
 
 	useEnterOptionSubmit({
 		optionRef,
 		value,
-		onClick,
+		onClick: disabled ? () => {} : onClick,
 	});
 
 	return (
 		<li
-			className={clsx(styles.option, styles[optionClassName || ''])}
+			className={clsx(styles.option, styles[optionClassName || ''], {
+				[styles.option_disabled]: disabled,
+				[styles.option_selected]: isSelected,
+			})}
 			value={value}
 			onClick={handleClick(value)}
-			tabIndex={0}
+			tabIndex={disabled ? -1 : 0}
+			aria-disabled={disabled}
+			data-disabled={disabled}
+			data-selected={isSelected}
 			data-testid={`select-option-${value}`}
 			ref={optionRef}>
 			<Text family={isFontFamilyClass(className) ? className : undefined}>
 				{title}
 			</Text>
+			{}
+			{isSelected && optionClassName?.includes('option-') && (
+				<div className={styles.selectedDot} />
+			)}
 		</li>
 	);
 };

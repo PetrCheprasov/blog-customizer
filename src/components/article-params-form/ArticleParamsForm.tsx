@@ -1,20 +1,192 @@
+import { useState, useRef } from 'react';
+import clsx from 'clsx';
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
+import { Select } from 'src/ui/select';
+import { RadioGroup } from 'src/ui/radio-group';
+import { useCloseOnOutsideClickOrEsc } from 'src/ui/radio-group/hooks/useCloseOnOutsideClickOrEsc';
+
+import {
+	fontFamilyOptions,
+	fontColors,
+	backgroundColors,
+	contentWidthArr,
+	fontSizeOptions,
+	defaultArticleState,
+	type OptionType,
+	type ArticleStateType,
+} from 'src/constants/articleProps';
 
 import styles from './ArticleParamsForm.module.scss';
 
-export const ArticleParamsForm = () => {
+type ArticleSettings = Omit<ArticleStateType, 'fontSizeOption'> & {
+	fontSize: string;
+};
+
+type ArticleParamsFormProps = {
+	currentSettings: ArticleSettings;
+	onApply: (settings: ArticleSettings) => void;
+};
+
+const prepareColorOptions = (
+	allColors: OptionType[],
+	currentColor: OptionType,
+	conflictingColor: OptionType
+): OptionType[] => {
+	return allColors.map((color) => ({
+		...color,
+		disabled: color.value === conflictingColor.value,
+	}));
+};
+
+export const ArticleParamsForm = ({
+	currentSettings,
+	onApply,
+}: ArticleParamsFormProps) => {
+	const [isOpen, setIsOpen] = useState(false);
+	const [formSettings, setFormSettings] =
+		useState<ArticleSettings>(currentSettings);
+
+	const asideRef = useRef<HTMLDivElement>(null);
+
+	useCloseOnOutsideClickOrEsc({
+		isOpenElement: isOpen,
+		elementRef: asideRef,
+		onClose: () => setIsOpen(false),
+	});
+
+	const fontColorOptions = prepareColorOptions(
+		fontColors,
+		formSettings.fontColor,
+		formSettings.backgroundColor
+	);
+
+	const backgroundColorOptions = prepareColorOptions(
+		backgroundColors,
+		formSettings.backgroundColor,
+		formSettings.fontColor
+	);
+
+	const selectedFontSizeOption =
+		fontSizeOptions.find((opt) => opt.value === formSettings.fontSize) ||
+		fontSizeOptions[0];
+
+	const handleChange = (key: keyof ArticleSettings, option: OptionType) => {
+		if (option.disabled) return;
+		setFormSettings((prev) => ({ ...prev, [key]: option }));
+	};
+
+	const handleFontSizeChange = (option: OptionType) => {
+		setFormSettings((prev) => ({
+			...prev,
+			fontSize: option.value,
+		}));
+	};
+
+	const handleReset = () => {
+		setFormSettings({
+			fontFamilyOption: defaultArticleState.fontFamilyOption,
+			fontColor: defaultArticleState.fontColor,
+			backgroundColor: defaultArticleState.backgroundColor,
+			contentWidth: defaultArticleState.contentWidth,
+			fontSize: defaultArticleState.fontSizeOption.value,
+		});
+	};
+
+	const handleApply = (e: React.FormEvent) => {
+		e.preventDefault();
+		console.log('Применить настройки:', formSettings);
+		onApply(formSettings);
+	};
+
 	return (
 		<>
-			<ArrowButton isOpen={false} onClick={() => {}} />
-			<aside className={styles.container}>
-				<form className={styles.form}>
+			<ArrowButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+			<aside
+				ref={asideRef}
+				className={clsx(styles.container, isOpen && styles.container_open)}>
+				<form
+					className={styles.form}
+					onSubmit={handleApply}
+					onReset={handleReset}>
+					<h2 className={styles.formTitle}>ЗАДАЙТЕ ПАРАМЕТРЫ</h2>
+
+					<div className={styles.section} style={{ marginBottom: '50px' }}>
+						<h3 className={styles.sectionTitle}>Шрифт</h3>
+						<Select
+							selected={formSettings.fontFamilyOption}
+							options={fontFamilyOptions.filter(
+								(opt) => opt.value !== formSettings.fontFamilyOption.value
+							)}
+							placeholder='Выберите шрифт'
+							onChange={(option) => handleChange('fontFamilyOption', option)}
+						/>
+					</div>
+
+					<div className={styles.separator}></div>
+
+					<div className={styles.section} style={{ marginBottom: '50px' }}>
+						<h3 className={styles.sectionTitle}>РАЗМЕР ШРИФТА</h3>
+						<RadioGroup
+							name='fontSize'
+							selected={selectedFontSizeOption}
+							options={fontSizeOptions}
+							onChange={handleFontSizeChange}
+							title=''
+						/>
+					</div>
+
+					<div className={styles.separator}></div>
+
+					<div className={styles.section} style={{ marginBottom: '100px' }}>
+						<h3 className={styles.sectionTitle}>ЦВЕТ ШРИФТА</h3>
+						<Select
+							selected={formSettings.fontColor}
+							options={fontColorOptions}
+							placeholder='Выберите цвет текста'
+							onChange={(option) => handleChange('fontColor', option)}
+						/>
+					</div>
+
+					<div className={styles.separator}></div>
+
+					<div className={styles.section} style={{ marginBottom: '50px' }}>
+						<h3 className={styles.sectionTitle}>ЦВЕТ ФОНА</h3>
+						<Select
+							selected={formSettings.backgroundColor}
+							options={backgroundColorOptions}
+							placeholder='Выберите цвет фона'
+							onChange={(option) => handleChange('backgroundColor', option)}
+						/>
+					</div>
+
+					<div className={styles.separator}></div>
+
+					<div className={styles.section}>
+						<h3 className={styles.sectionTitle}>ШИРИНА КОНТЕНТА</h3>
+						<Select
+							selected={formSettings.contentWidth}
+							options={contentWidthArr.filter(
+								(opt) => opt.value !== formSettings.contentWidth.value
+							)}
+							placeholder='Выберите ширину'
+							onChange={(option) => handleChange('contentWidth', option)}
+						/>
+					</div>
+
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' htmlType='reset' type='clear' />
-						<Button title='Применить' htmlType='submit' type='apply' />
+						<Button
+							title='СБРОСИТЬ'
+							htmlType='reset'
+							type='clear'
+							onClick={handleReset}
+						/>
+						<Button title='ПРИМЕНИТЬ' htmlType='submit' type='apply' />
 					</div>
 				</form>
 			</aside>
 		</>
 	);
 };
+
+export type { ArticleParamsFormProps };
